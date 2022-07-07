@@ -1,35 +1,26 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
-from datetime import timedelta
-from ssl import SSLError
+from ssl import CERT_NONE
+from ssl import DER_cert_to_PEM_cert
 from urllib import request
 
 from cryptography import x509
-import pytz
 
 
 def get_cert_expiration_from_host(host, port):
     context = request.ssl.create_default_context()
+    context.check_hostname = False
+    context.verify_mode = CERT_NONE
 
-    try:
-        with request.socket.create_connection((host, port)) as sock:
-            with context.wrap_socket(sock, server_hostname=host) as ssock:
-                cert = ssock.getpeercert()
+    with request.socket.create_connection((host, port)) as sock:
+        with context.wrap_socket(sock, server_hostname=host) as ssock:
+            der_data = ssock.getpeercert(True)
 
-        expire_date = datetime.strptime(cert.get('notAfter'),
-                                        '%b %d %H:%M:%S %Y %Z')
-        tzone = cert.get('notAfter').split(' ')[-1]
-        offset = datetime.now(pytz.timezone(tzone)).utcoffset()
-        offset = offset if offset else timedelta(0)
+    pem_data = DER_cert_to_PEM_cert(der_data)
+    cert = x509.load_pem_x509_certificate(str.encode(pem_data))
 
-        return expire_date - offset
-
-    except SSLError as e:
-        if e.reason == 'CERTIFICATE_VERIFY_FAILED':
-            return datetime.utcnow() - timedelta(days=1)
-        else:
-            raise
+    return cert.not_valid_after
 
 
 def get_cert_expiration_from_file(path):
