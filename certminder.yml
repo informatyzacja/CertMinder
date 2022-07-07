@@ -1,0 +1,8 @@
+---
+#
+# CertMinder configuration file
+#
+# This file shall be located in the current working directory, where the app
+# is running. Alternatively it can be kept as a hidden file (name preceded
+# with a dot) in the app's user home directory.
+#
