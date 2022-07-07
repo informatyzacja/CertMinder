@@ -6,6 +6,8 @@
 # is running. Alternatively it can be kept as a hidden file (name preceded
 # with a dot) in the app's user home directory.
 #
+app_port: 5555
+
 to_verify:
   - host: pwr.edu.pl
   - host: eportal.pwr.edu.pl

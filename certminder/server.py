@@ -6,6 +6,8 @@ from flask import Flask
 from jinja2 import Environment
 from jinja2 import PackageLoader
 
+from certminder import config
+
 
 app = Flask(__name__)
 
@@ -24,4 +26,4 @@ def handle_sigterm(*args):
 
 def main() -> None:
     signal.signal(signal.SIGTERM, handle_sigterm)
-    app.run(port=5555)
+    app.run(port=config.app_port)
