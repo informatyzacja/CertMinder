@@ -33,3 +33,5 @@ def load_config_file() -> dict:
 
 
 CONFIG = load_config_file()
+
+to_verify = CONFIG.get('to_verify', [])
