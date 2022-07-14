@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>CertMinder</title>
-        <style type="text/css">
+        <style>
             body {
                 font-family: sans-serif;
                 font-size: 16px;
@@ -18,6 +18,12 @@
                 color: #fff;
                 margin: 0;
                 padding: 1.0em;
+            }
+            nav {
+                border-bottom: 1px dotted #000;
+                margin: 0 auto;
+                padding: 1.0em;
+                text-align: center;
             }
             main {
                 margin: 5.0em auto;
@@ -47,6 +53,13 @@
                 margin-left: 1.0em;
                 padding: 0;
                 padding-right: 10px;
+            }
+
+            nav label {
+                cursor: pointer;
+            }
+            nav input#search {
+                width: 20.0em;
             }
 
             main a,
@@ -131,6 +144,36 @@
                 padding: 0;
             }
         </style>
+        <script>
+            let searched = '';
+
+            function filterRows() {
+                let rows = document.querySelectorAll('table tbody tr');
+                for(const row of rows) {
+                    let text = row.textContent.replace(/\s\s+/g, ' ').toLowerCase();
+
+                    if(searched == '' || text.match(searched)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function(event) {
+                let search = document.getElementById('search');
+
+                search.addEventListener('input', function(event) {
+                    searched = event.target.value.toLowerCase();
+                    filterRows();
+                });
+
+                let tables = document.querySelectorAll('table');
+                for(const table of tables) {
+                    table.width = table.offsetWidth;
+                }
+            });
+        </script>
     </head>
     <body>
         <header>
@@ -139,6 +182,10 @@
                 <h2>– mind your certificates</h2>
             </a>
         </header>
+        <nav>
+            <label for="search">Search:</label>
+            <input type="search" name="search" id="search" autocomplete="off" />
+        </nav>
         <main class="index">
             <table>
                 <thead>
