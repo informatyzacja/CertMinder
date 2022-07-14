@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
+import time
 
 from certminder.certificate import Cert
 from certminder import config
@@ -32,4 +33,8 @@ def update() -> None:
 
 
 def main() -> None:
-    update()
+    while True:
+        print('Updating results database...')
+        update()
+        print('Done.')
+        time.sleep(60 * 60 * 6)
