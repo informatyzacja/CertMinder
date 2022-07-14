@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 
 import multiprocessing
+import signal
 
 from certminder import checker
 from certminder import server
+
+
+def handle_sigterm(*args):
+    raise KeyboardInterrupt()
 
 
 def main() -> None:
@@ -13,5 +18,18 @@ def main() -> None:
     checker_process.start()
     server_process.start()
 
-    checker_process.join()
-    server_process.join()
+    signal.signal(signal.SIGTERM, handle_sigterm)
+
+    try:
+        if checker_process.is_alive():
+            checker_process.join()
+        if server_process.is_alive():
+            server_process.join()
+    except KeyboardInterrupt:
+        if checker_process.is_alive():
+            checker_process.terminate()
+        if server_process.is_alive():
+            server_process.terminate()
+    else:
+        checker_process.close()
+        server_process.close()
