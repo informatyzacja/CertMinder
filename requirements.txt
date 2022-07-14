@@ -3,3 +3,4 @@ Flask
 Jinja2
 PyYAML
 pytz
+SQLAlchemy
