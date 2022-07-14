@@ -21,7 +21,6 @@
             }
             main {
                 margin: 5.0em auto;
-                width: 50.0em;
             }
             footer {
                 border-top: 1px dotted #000;
@@ -56,6 +55,68 @@
                 color: #000;
                 text-decoration: none;
             }
+            main table {
+                border: 1px solid #000;
+                border-collapse: separate;
+                border-radius: 0.25em;
+                border-spacing: 0.1em;
+                margin: 0 auto;
+                padding: 0.5em;
+            }
+            main table thead:before {
+                content: '';
+                display: block;
+                margin-top: 0.25em;
+            }
+            main table thead th {
+                border-bottom: 3px double #000;
+                min-width: 6.0em;
+                text-align: center;
+            }
+            main table thead:after {
+                content: '';
+                display: block;
+                margin-top: 0.25em;
+            }
+            main table tbody td {
+                min-width: 6.0em;
+                overflow: hidden;
+                padding: 0.25em;
+                text-align: center;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            main table tbody td.host {
+                font-family: monospace;
+                text-align: left;
+            }
+            main table tbody td.port {
+                font-family: monospace;
+                min-width: 2.0em;
+            }
+            main table tbody td.status {
+                border-width: 2px;
+                border-style: solid;
+                border-radius: 0.25em;
+                font-weight: bold;
+
+                background-color: rgba(146, 131, 116, 0.5);
+                border-color: #928374;
+                color: #7c6f64;
+            }
+            main table tbody td.status:hover {
+                opacity: 0.75;
+            }
+            main table tbody td.True {
+                background-color: rgba(152, 151, 26, 0.5);
+                border-color: #98971a;
+                color: #79740e;
+            }
+            main table tbody td.False {
+                background-color: rgba(204, 36, 29, 0.5);
+                border-color: #cc241d;
+                color: #9d0006;
+            }
 
             footer a,
             footer a:visited {
@@ -79,7 +140,30 @@
             </a>
         </header>
         <main class="index">
-            Coming soon!
+            <table>
+                <thead>
+                    <tr>
+                        <th>Host</th>
+                        <th>Port</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>CName</th>
+                        <th>Valid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%- for result in results %}
+                    <tr>
+                        <td class="host">{{ result.host }}</td>
+                        <td class="port">{{ result.port }}</td>
+                        <td class="status {{ result.start }}">{% if result.start %}OK{% else %}FAIL{% endif %}</td>
+                        <td class="status {{ result.end }}">{% if result.end %}OK{% else %}FAIL{% endif %}</td>
+                        <td class="status {{ result.name }}">{% if result.name %}OK{% else %}FAIL{% endif %}</td>
+                        <td class="status {{ result.valid }}">{% if result.valid %}OK{% else %}FAIL{% endif %}</td>
+                    </tr>
+                    {%- endfor -%}
+                </tbody>
+            </table>
         </main>
         <footer>
             <p>
