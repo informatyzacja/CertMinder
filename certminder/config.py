@@ -35,4 +35,5 @@ def load_config_file() -> dict:
 CONFIG = load_config_file()
 
 app_port = CONFIG.get('app_port', 5555)
+db_file = CONFIG.get('db_file', f'{__package__}.sqlite3')
 to_verify = CONFIG.get('to_verify', [])
